@@ -58,6 +58,4 @@ Then install the qmd MCP plugin in Claude Code:
   /reload-plugins
 
 Optional cron/launchd/systemd setup for auto-parse: see README.md
-Optional Claude-Code seed entities:
-  cp examples/claude-code-seeds/*.md "$TARGET/entities/"
 EOF

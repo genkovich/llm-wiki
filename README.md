@@ -79,20 +79,6 @@ systemctl --user enable --now wiki-parse.timer
 
 Logs: `~/.local/state/wiki-parse.log` and `$WIKI/.cron-parse.log`. Stop: `systemctl --user disable --now wiki-parse.timer`.
 
-## Migration from manual symlink install
-
-If you previously activated the plugin manually (the older instructions for this repo), undo that first to avoid a namespace collision with the marketplace install:
-
-```bash
-# 1. Remove the symlink
-rm ~/.claude/local-plugins/wiki
-
-# 2. Remove the manual flag from settings.json
-python3 -c "import json,os; p=os.path.expanduser('~/.claude/settings.json'); d=json.load(open(p)); d.get('enabledPlugins',{}).pop('wiki@local', None); json.dump(d,open(p,'w'),indent=2,ensure_ascii=False)"
-
-# 3. Restart Claude Code, then install via marketplace as in Quickstart
-```
-
 ## Local development
 
 Working on the plugin itself? Add the local checkout as a marketplace and reinstall after every change:
@@ -113,19 +99,12 @@ After `init.sh` runs, open and edit the placeholders in the new wiki:
 
 ## Workflows
 
-Three workflows are described in the generated `wiki/CLAUDE.md` — the LLM reads them every time:
+The four skills above map to these actions — authoritative protocols live in the generated `wiki/CLAUDE.md`, which the LLM reads on every invocation:
 
-- **ingest** — new source (raw → `sources/<slug>.md` → updates to `entities/`/`concepts/`)
-- **query** — question → MCP query → synthesis → optional filer-back into `comparisons/`/`questions/`
-- **lint** — find contradictions / orphans / stale pages / data gaps
-
-## Optional: Claude Code seed entities
-
-If your domain is about Claude Code itself — drop in the stub entities from a real instance:
-
-```bash
-cp examples/claude-code-seeds/*.md /path/to/project/wiki/entities/
-```
+- **`wiki:inbox`** — queue helper: drop a URL or file into `raw/_inbox/` for later parsing (no other writes)
+- **`wiki:parse`** — ingest pipeline: raw source → `sources/<slug>.md` → updates 10-15 `entities/`/`concepts/` with citations → append `log.md`
+- **`wiki:query`** — MCP qmd search → synthesis with `[[wikilink]]` citations → optional filer-back into `comparisons/`/`questions/`
+- **`wiki:lint`** — find contradictions, orphans, stale pages, data gaps → write into `questions/lint-YYYY-MM-DD.md`
 
 ## Generated structure
 
