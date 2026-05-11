@@ -147,9 +147,38 @@ wiki/
 
 ## Requirements
 
-- Node.js or Bun (for qmd)
-- ~2GB of disk for GGUF models (embedder + reranker, downloaded on first use)
-- Obsidian optional (Dataview plugin renders `index.md`)
+### Core (always needed)
+
+- **Node.js or Bun** — runtime for the qmd search engine
+- **[qmd](https://github.com/tobi/qmd)** — local search engine used by `wiki:query`, `wiki:lint`, and `wiki:parse` (to refresh the index after ingest)
+  ```bash
+  npm install -g @tobilu/qmd
+  # or: bun install -g @tobilu/qmd
+  ```
+- **~2GB disk** for GGUF models (embedder + reranker, downloaded on first `qmd embed` / `qmd query`)
+
+### Per-source ingest dependencies
+
+Install only what you'll actually ingest. The `wiki:parse` skill picks the right tool per input.
+
+- **[`yt-dlp`](https://github.com/yt-dlp/yt-dlp)** — for YouTube URLs (captions + optional audio extraction)
+  ```bash
+  brew install yt-dlp           # macOS
+  pip3 install --user yt-dlp    # Linux (apt packages are often stale)
+  ```
+- **[`whisper`](https://github.com/openai/whisper)** (optional, audio fallback) — only used when a YouTube video has no captions
+  ```bash
+  pip3 install --user openai-whisper
+  ```
+- **[`defuddle`](https://github.com/kepano/defuddle)** — for generic web articles (clips HTML → clean markdown). The `wiki:parse` skill invokes it via the `obsidian:defuddle` skill wrapper
+  ```bash
+  brew install defuddle         # macOS
+  npm install -g defuddle       # cross-platform
+  ```
+
+### Optional
+
+- **Obsidian** — the Dataview plugin renders `index.md` as live tables. The wiki itself works without it (plain markdown)
 
 ## Verification
 
