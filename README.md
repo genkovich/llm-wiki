@@ -7,18 +7,17 @@ This repository is both a **Claude Code marketplace** (so you can install the `w
 ## Quickstart
 
 ```bash
-# 1. Add this repo as a Claude Code marketplace and install the plugin
+# 1. Materialize a wiki skeleton inside your project (no clone — fetches template tarball)
+curl -fsSL https://raw.githubusercontent.com/genkovich/llm-wiki/main/init.sh | bash -s ./wiki
+
+# 2. Add this repo as a Claude Code marketplace and install the plugin
 #    Inside Claude Code:
 /plugin marketplace add genkovich/llm-wiki
 /plugin install wiki@llm-wiki
 
-# 2. Materialize a wiki skeleton inside your project
-git clone https://github.com/genkovich/llm-wiki ~/.local/share/llm-wiki   # template files
-~/.local/share/llm-wiki/init.sh /path/to/project/wiki
-
 # 3. Install qmd (search engine: on-device BM25 + vector + LLM rerank)
 npm install -g @tobilu/qmd
-qmd collection add /path/to/project/wiki --name my-wiki
+qmd collection add ./wiki --name my-wiki
 qmd context add qmd://my-wiki "<1-2 sentences about the domain — affects reranking>"
 qmd embed   # first run downloads ~330MB of embedder GGUF
 ```

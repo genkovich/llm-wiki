@@ -3,20 +3,26 @@ set -euo pipefail
 
 TARGET="${1:-}"
 if [ -z "$TARGET" ]; then
-  echo "Usage: $0 <wiki-target-dir>"
-  echo "Example: $0 /path/to/project/wiki"
-  exit 1
-fi
-
-TEMPLATE="$(cd "$(dirname "$0")" && pwd)/template"
-
-if [ ! -d "$TEMPLATE" ]; then
-  echo "Error: template directory not found at $TEMPLATE"
+  echo "Usage: curl -fsSL https://raw.githubusercontent.com/genkovich/llm-wiki/main/init.sh | bash -s <wiki-target-dir>"
+  echo "Example: curl -fsSL https://raw.githubusercontent.com/genkovich/llm-wiki/main/init.sh | bash -s ./wiki"
   exit 1
 fi
 
 if [ -e "$TARGET/CLAUDE.md" ]; then
   echo "Error: wiki already exists at $TARGET (CLAUDE.md found)"
+  exit 1
+fi
+
+REPO_URL="https://codeload.github.com/genkovich/llm-wiki/tar.gz/refs/heads/main"
+TMP="$(mktemp -d "${TMPDIR:-/tmp}/llm-wiki.XXXXXX")"
+trap 'rm -rf "$TMP"' EXIT
+
+echo "Fetching template from $REPO_URL ..."
+curl -fsSL "$REPO_URL" | tar -xz -C "$TMP" --strip-components=1
+
+TEMPLATE="$TMP/template"
+if [ ! -d "$TEMPLATE" ]; then
+  echo "Error: template/ missing in fetched tarball"
   exit 1
 fi
 
