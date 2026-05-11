@@ -1,0 +1,15 @@
+# Substitute __PLUGIN_ROOT__ with your installed plugin path,
+# then copy to ~/.config/systemd/user/wiki-parse.service
+[Unit]
+Description=LLM Wiki — parse raw/_inbox/ headlessly
+After=default.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=-%h/.config/wiki-parse.env
+ExecStart=__PLUGIN_ROOT__/scripts/cron-parse.sh
+StandardOutput=append:%h/.local/state/wiki-parse.log
+StandardError=append:%h/.local/state/wiki-parse.log
+
+[Install]
+WantedBy=default.target

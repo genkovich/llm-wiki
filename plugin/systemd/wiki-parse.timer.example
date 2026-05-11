@@ -1,0 +1,13 @@
+# Copy to ~/.config/systemd/user/wiki-parse.timer
+# Activates wiki-parse.service every 10 minutes (with catch-up after sleep/downtime)
+[Unit]
+Description=LLM Wiki — periodic parse of raw/_inbox/
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=10min
+Persistent=true
+Unit=wiki-parse.service
+
+[Install]
+WantedBy=timers.target

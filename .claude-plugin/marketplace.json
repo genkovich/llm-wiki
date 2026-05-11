@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "llm-wiki",
+  "owner": { "name": "genkovich" },
+  "description": "Portable scaffold for LLM-curated wikis — ingest, query, lint workflows for any markdown KB.",
+  "plugins": [
+    {
+      "name": "wiki",
+      "source": "./plugin",
+      "description": "wiki:inbox/parse/query/lint skills. Works on any folder whose CLAUDE.md has type: schema, scope: wiki.",
+      "keywords": ["wiki", "knowledge-base", "memex", "qmd", "obsidian"]
+    }
+  ]
+}

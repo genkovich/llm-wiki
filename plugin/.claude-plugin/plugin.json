@@ -1,0 +1,5 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin.json",
+  "name": "wiki",
+  "description": "LLM Wiki workflows — ingest, query, lint, inbox. Operates on any wiki whose CLAUDE.md has frontmatter type: schema, scope: wiki."
+}
